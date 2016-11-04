@@ -2,6 +2,7 @@ group 'uk.co.benoxley'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'distribution'
 
 sourceCompatibility = 1.8
 
