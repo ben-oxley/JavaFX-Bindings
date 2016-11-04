@@ -44,7 +44,7 @@ import java.util.Locale;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class BidirectionalBindingWithConversionTest<S, T> {
+public class BidirectionalObjectBindingWithConversionTest<S, T> {
 
     public static interface Functions<U, V> {
         PropertyMock<U> create0();
@@ -63,7 +63,7 @@ public class BidirectionalBindingWithConversionTest<S, T> {
     private PropertyMock<S> op0;
     private PropertyMock<T> op1;
 
-    public BidirectionalBindingWithConversionTest(Functions<S, T> func, S[] v0, T[] v1) {
+    public BidirectionalObjectBindingWithConversionTest(Functions<S, T> func, S[] v0, T[] v1) {
         this.op0 = func.create0();
         this.op1 = func.create1();
         this.func = func;

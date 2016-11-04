@@ -39,7 +39,7 @@ import javafx.beans.value.ObservableValue;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class BidirectionalBindingTest<T> {
+public class BidirectionalObjectBindingTest<T> {
 
     @FunctionalInterface
     public static interface PropertyFactory<T> {
@@ -69,7 +69,7 @@ public class BidirectionalBindingTest<T> {
     private Property<T> op4;
     private T[] v;
 
-    public BidirectionalBindingTest(Factory<T> factory) {
+    public BidirectionalObjectBindingTest(Factory<T> factory) {
         this.factory = factory;
     }
 
