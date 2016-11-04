@@ -38,9 +38,9 @@ import java.text.Format;
 import java.text.ParseException;
 import java.util.logging.Level;
 
-public abstract class BidirectionalBinding<T> implements ChangeListener<T>, WeakListener {
+public abstract class BidirectionalObjectBinding<T> implements ChangeListener<T>, WeakListener {
 
-    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(BidirectionalBinding.class.getName());
+    private static final java.util.logging.Logger LOGGER = java.util.logging.Logger.getLogger(BidirectionalObjectBinding.class.getName());
 
     private static void checkParameters(Object property1, Object property2) {
         if ((property1 == null) || (property2 == null)) {
@@ -51,9 +51,9 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    public static <T> BidirectionalBinding bind(Property<T> property1, Property<T> property2) {
+    public static <T> BidirectionalObjectBinding bind(Property<T> property1, Property<T> property2) {
         checkParameters(property1, property2);
-        final BidirectionalBinding binding =
+        final BidirectionalObjectBinding binding =
                 ((property1 instanceof DoubleProperty) && (property2 instanceof DoubleProperty)) ?
                         new BidirectionalDoubleBinding((DoubleProperty) property1, (DoubleProperty) property2)
                 : ((property1 instanceof FloatProperty) && (property2 instanceof FloatProperty)) ?
@@ -64,7 +64,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
                         new BidirectionalLongBinding((LongProperty) property1, (LongProperty) property2)
                 : ((property1 instanceof BooleanProperty) && (property2 instanceof BooleanProperty)) ?
                         new BidirectionalBooleanBinding((BooleanProperty) property1, (BooleanProperty) property2)
-                : new TypedGenericBidirectionalBinding<T>(property1, property2);
+                : new TypedGenericBidirectionalObjectBinding<T>(property1, property2);
         property1.setValue(property2.getValue());
         property1.addListener(binding);
         property2.addListener(binding);
@@ -76,7 +76,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         if (format == null) {
             throw new NullPointerException("Format cannot be null");
         }
-        final StringConversionBidirectionalBinding<?> binding = new StringFormatBidirectionalBinding(stringProperty, otherProperty, format);
+        final StringConversionBidirectionalObjectBinding<?> binding = new StringFormatBidirectionalObjectBinding(stringProperty, otherProperty, format);
         stringProperty.setValue(format.format(otherProperty.getValue()));
         stringProperty.addListener(binding);
         otherProperty.addListener(binding);
@@ -88,7 +88,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         if (converter == null) {
             throw new NullPointerException("Converter cannot be null");
         }
-        final StringConversionBidirectionalBinding<T> binding = new StringConverterBidirectionalBinding<T>(stringProperty, otherProperty, converter);
+        final StringConversionBidirectionalObjectBinding<T> binding = new StringConverterBidirectionalObjectBinding<T>(stringProperty, otherProperty, converter);
         stringProperty.setValue(converter.toString(otherProperty.getValue()));
         stringProperty.addListener(binding);
         otherProperty.addListener(binding);
@@ -97,14 +97,14 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
 
     public static <T> void unbind(Property<T> property1, Property<T> property2) {
         checkParameters(property1, property2);
-        final BidirectionalBinding binding = new UntypedGenericBidirectionalBinding(property1, property2);
+        final BidirectionalObjectBinding binding = new UntypedGenericBidirectionalObjectBinding(property1, property2);
         property1.removeListener(binding);
         property2.removeListener(binding);
     }
 
     public static void unbind(Object property1, Object property2) {
         checkParameters(property1, property2);
-        final BidirectionalBinding binding = new UntypedGenericBidirectionalBinding(property1, property2);
+        final BidirectionalObjectBinding binding = new UntypedGenericBidirectionalObjectBinding(property1, property2);
         if (property1 instanceof ObservableValue) {
             ((ObservableValue) property1).removeListener(binding);
         }
@@ -113,42 +113,42 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    public static BidirectionalBinding bindNumber(Property<Integer> property1, IntegerProperty property2) {
+    public static BidirectionalObjectBinding bindNumber(Property<Integer> property1, IntegerProperty property2) {
         return bindNumber(property1, (Property<Number>)property2);
     }
 
-    public static BidirectionalBinding bindNumber(Property<Long> property1, LongProperty property2) {
+    public static BidirectionalObjectBinding bindNumber(Property<Long> property1, LongProperty property2) {
         return bindNumber(property1, (Property<Number>)property2);
     }
 
-    public static BidirectionalBinding bindNumber(Property<Float> property1, FloatProperty property2) {
+    public static BidirectionalObjectBinding bindNumber(Property<Float> property1, FloatProperty property2) {
         return bindNumber(property1, (Property<Number>)property2);
     }
 
-    public static BidirectionalBinding bindNumber(Property<Double> property1, DoubleProperty property2) {
+    public static BidirectionalObjectBinding bindNumber(Property<Double> property1, DoubleProperty property2) {
         return bindNumber(property1, (Property<Number>)property2);
     }
 
-    public static BidirectionalBinding bindNumber(IntegerProperty property1, Property<Integer> property2) {
+    public static BidirectionalObjectBinding bindNumber(IntegerProperty property1, Property<Integer> property2) {
         return bindNumberObject(property1, property2);
     }
 
-    public static BidirectionalBinding bindNumber(LongProperty property1, Property<Long> property2) {
+    public static BidirectionalObjectBinding bindNumber(LongProperty property1, Property<Long> property2) {
         return bindNumberObject(property1, property2);
     }
 
-    public static BidirectionalBinding bindNumber(FloatProperty property1, Property<Float> property2) {
+    public static BidirectionalObjectBinding bindNumber(FloatProperty property1, Property<Float> property2) {
         return bindNumberObject(property1, property2);
     }
 
-    public static BidirectionalBinding bindNumber(DoubleProperty property1, Property<Double> property2) {
+    public static BidirectionalObjectBinding bindNumber(DoubleProperty property1, Property<Double> property2) {
         return bindNumberObject(property1, property2);
     }
 
-    private static <T extends Number> BidirectionalBinding bindNumberObject(Property<Number> property1, Property<T> property2) {
+    private static <T extends Number> BidirectionalObjectBinding bindNumberObject(Property<Number> property1, Property<T> property2) {
         checkParameters(property1, property2);
 
-        final BidirectionalBinding<Number> binding = new TypedNumberBidirectionalBinding<T>(property2, property1);
+        final BidirectionalObjectBinding<Number> binding = new TypedNumberBidirectionalObjectBinding<T>(property2, property1);
 
         property1.setValue(property2.getValue());
         property1.addListener(binding);
@@ -156,10 +156,10 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         return binding;
     }
 
-    private static <T extends Number> BidirectionalBinding bindNumber(Property<T> property1, Property<Number> property2) {
+    private static <T extends Number> BidirectionalObjectBinding bindNumber(Property<T> property1, Property<Number> property2) {
         checkParameters(property1, property2);
 
-        final BidirectionalBinding<Number> binding = new TypedNumberBidirectionalBinding<T>(property1, property2);
+        final BidirectionalObjectBinding<Number> binding = new TypedNumberBidirectionalObjectBinding<T>(property1, property2);
 
         property1.setValue((T)property2.getValue());
         property1.addListener(binding);
@@ -169,7 +169,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
 
     public static <T extends Number> void unbindNumber(Property<T> property1, Property<Number> property2) {
         checkParameters(property1, property2);
-        final BidirectionalBinding binding = new UntypedGenericBidirectionalBinding(property1, property2);
+        final BidirectionalObjectBinding binding = new UntypedGenericBidirectionalObjectBinding(property1, property2);
         if (property1 instanceof ObservableValue) {
             ((ObservableValue) property1).removeListener(binding);
         }
@@ -180,7 +180,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
 
     private final int cachedHashCode;
 
-    private BidirectionalBinding(Object property1, Object property2) {
+    private BidirectionalObjectBinding(Object property1, Object property2) {
         cachedHashCode = property1.hashCode() * property2.hashCode();
     }
 
@@ -210,8 +210,8 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
             return false;
         }
 
-        if (obj instanceof BidirectionalBinding) {
-            final BidirectionalBinding otherBinding = (BidirectionalBinding) obj;
+        if (obj instanceof BidirectionalObjectBinding) {
+            final BidirectionalObjectBinding otherBinding = (BidirectionalObjectBinding) obj;
             final Object propertyB1 = otherBinding.getProperty1();
             final Object propertyB2 = otherBinding.getProperty2();
             if ((propertyB1 == null) || (propertyB2 == null)) {
@@ -228,7 +228,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         return false;
     }
 
-    private static class BidirectionalBooleanBinding extends BidirectionalBinding<Boolean> {
+    private static class BidirectionalBooleanBinding extends BidirectionalObjectBinding<Boolean> {
         private final WeakReference<BooleanProperty> propertyRef1;
         private final WeakReference<BooleanProperty> propertyRef2;
         private boolean updating = false;
@@ -295,7 +295,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class BidirectionalDoubleBinding extends BidirectionalBinding<Number> {
+    private static class BidirectionalDoubleBinding extends BidirectionalObjectBinding<Number> {
         private final WeakReference<DoubleProperty> propertyRef1;
         private final WeakReference<DoubleProperty> propertyRef2;
         private boolean updating = false;
@@ -362,7 +362,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class BidirectionalFloatBinding extends BidirectionalBinding<Number> {
+    private static class BidirectionalFloatBinding extends BidirectionalObjectBinding<Number> {
         private final WeakReference<FloatProperty> propertyRef1;
         private final WeakReference<FloatProperty> propertyRef2;
         private boolean updating = false;
@@ -429,7 +429,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class BidirectionalIntegerBinding extends BidirectionalBinding<Number>{
+    private static class BidirectionalIntegerBinding extends BidirectionalObjectBinding<Number>{
         private final WeakReference<IntegerProperty> propertyRef1;
         private final WeakReference<IntegerProperty> propertyRef2;
         private boolean updating = false;
@@ -496,7 +496,7 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class BidirectionalLongBinding extends BidirectionalBinding<Number> {
+    private static class BidirectionalLongBinding extends BidirectionalObjectBinding<Number> {
         private final WeakReference<LongProperty> propertyRef1;
         private final WeakReference<LongProperty> propertyRef2;
         private boolean updating = false;
@@ -563,12 +563,12 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class TypedGenericBidirectionalBinding<T> extends BidirectionalBinding<T> {
+    private static class TypedGenericBidirectionalObjectBinding<T> extends BidirectionalObjectBinding<T> {
         private final WeakReference<Property<T>> propertyRef1;
         private final WeakReference<Property<T>> propertyRef2;
         private boolean updating = false;
 
-        private TypedGenericBidirectionalBinding(Property<T> property1, Property<T> property2) {
+        private TypedGenericBidirectionalObjectBinding(Property<T> property1, Property<T> property2) {
             super(property1, property2);
             propertyRef1 = new WeakReference<Property<T>>(property1);
             propertyRef2 = new WeakReference<Property<T>>(property2);
@@ -630,12 +630,12 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class TypedNumberBidirectionalBinding<T extends Number> extends BidirectionalBinding<Number> {
+    private static class TypedNumberBidirectionalObjectBinding<T extends Number> extends BidirectionalObjectBinding<Number> {
         private final WeakReference<Property<T>> propertyRef1;
         private final WeakReference<Property<Number>> propertyRef2;
         private boolean updating = false;
 
-        private TypedNumberBidirectionalBinding(Property<T> property1, Property<Number> property2) {
+        private TypedNumberBidirectionalObjectBinding(Property<T> property1, Property<Number> property2) {
             super(property1, property2);
             propertyRef1 = new WeakReference<Property<T>>(property1);
             propertyRef2 = new WeakReference<Property<Number>>(property2);
@@ -697,12 +697,12 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class UntypedGenericBidirectionalBinding extends BidirectionalBinding<Object> {
+    private static class UntypedGenericBidirectionalObjectBinding extends BidirectionalObjectBinding<Object> {
 
         private final Object property1;
         private final Object property2;
 
-        public UntypedGenericBidirectionalBinding(Object property1, Object property2) {
+        public UntypedGenericBidirectionalObjectBinding(Object property1, Object property2) {
             super(property1, property2);
             this.property1 = property1;
             this.property2 = property2;
@@ -724,13 +724,13 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    public abstract static class StringConversionBidirectionalBinding<T> extends BidirectionalBinding<Object> {
+    public abstract static class StringConversionBidirectionalObjectBinding<T> extends BidirectionalObjectBinding<Object> {
 
         private final WeakReference<Property<String>> stringPropertyRef;
         private final WeakReference<Property<T>> otherPropertyRef;
         private boolean updating;
 
-        public StringConversionBidirectionalBinding(Property<String> stringProperty, Property<T> otherProperty) {
+        public StringConversionBidirectionalObjectBinding(Property<String> stringProperty, Property<T> otherProperty) {
             super(stringProperty, otherProperty);
             stringPropertyRef = new WeakReference<Property<String>>(stringProperty);
             otherPropertyRef = new WeakReference<Property<T>>(otherProperty);
@@ -788,12 +788,12 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class StringFormatBidirectionalBinding extends StringConversionBidirectionalBinding {
+    private static class StringFormatBidirectionalObjectBinding extends StringConversionBidirectionalObjectBinding {
 
         private final Format format;
 
         @SuppressWarnings("unchecked")
-        public StringFormatBidirectionalBinding(Property<String> stringProperty, Property<?> otherProperty, Format format) {
+        public StringFormatBidirectionalObjectBinding(Property<String> stringProperty, Property<?> otherProperty, Format format) {
             super(stringProperty, otherProperty);
             this.format = format;
         }
@@ -809,11 +809,11 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class StringConverterBidirectionalBinding<T> extends StringConversionBidirectionalBinding<T> {
+    private static class StringConverterBidirectionalObjectBinding<T> extends StringConversionBidirectionalObjectBinding<T> {
 
         private final StringConverter<T> converter;
 
-        public StringConverterBidirectionalBinding(Property<String> stringProperty, Property<T> otherProperty, StringConverter<T> converter) {
+        public StringConverterBidirectionalObjectBinding(Property<String> stringProperty, Property<T> otherProperty, StringConverter<T> converter) {
             super(stringProperty, otherProperty);
             this.converter = converter;
         }
@@ -829,13 +829,13 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    public abstract static class ObjectConversionBidirectionalBinding<A,B> extends BidirectionalBinding<Object> {
+    public abstract static class ObjectConversionBidirectionalObjectBinding<A,B> extends BidirectionalObjectBinding<Object> {
 
         private final WeakReference<Property<A>> stringPropertyRef;
         private final WeakReference<Property<B>> otherPropertyRef;
         private boolean updating;
 
-        public ObjectConversionBidirectionalBinding(Property<A> stringProperty, Property<B> otherProperty) {
+        public ObjectConversionBidirectionalObjectBinding(Property<A> stringProperty, Property<B> otherProperty) {
             super(stringProperty, otherProperty);
             stringPropertyRef = new WeakReference<Property<A>>(stringProperty);
             otherPropertyRef = new WeakReference<Property<B>>(otherProperty);
@@ -893,11 +893,11 @@ public abstract class BidirectionalBinding<T> implements ChangeListener<T>, Weak
         }
     }
 
-    private static class ObjectConverterBidirectionalBinding<A,B> extends ObjectConversionBidirectionalBinding<A,B> {
+    private static class ObjectConverterBidirectionalObjectBinding<A,B> extends ObjectConversionBidirectionalObjectBinding<A,B> {
 
         private final ObjectConverter<A,B> converter;
 
-        public ObjectConverterBidirectionalBinding(Property<A> propertyA, Property<B> propertyB, ObjectConverter<A,B> converter) {
+        public ObjectConverterBidirectionalObjectBinding(Property<A> propertyA, Property<B> propertyB, ObjectConverter<A,B> converter) {
             super(propertyA, propertyB);
             this.converter = converter;
         }
