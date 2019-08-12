@@ -23,7 +23,7 @@
  * questions.
  */
 
-package com.sun.javafx.binding;
+package uk.co.benoxley.javafx.binding;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -209,7 +209,7 @@ public class BidirectionalObjectBindingWithConversionTest<S, T> {
                     }
                     @Override
                     public Object createBindingDirectly(PropertyMock<String> op0, PropertyMock<Date> op1) {
-                        return BidirectionalBinding.bind(op0, op1, format);
+                        return BidirectionalObjectBinding.bind(op0, op1, format);
                     }
 
                     @Override
@@ -246,7 +246,7 @@ public class BidirectionalObjectBindingWithConversionTest<S, T> {
                     }
                     @Override
                     public Object createBindingDirectly(PropertyMock<String> op0, PropertyMock<Date> op1) {
-                        return BidirectionalBinding.bind(op0, op1, converter);
+                        return BidirectionalObjectBinding.bind(op0, op1, converter);
                     }
 
                     @Override

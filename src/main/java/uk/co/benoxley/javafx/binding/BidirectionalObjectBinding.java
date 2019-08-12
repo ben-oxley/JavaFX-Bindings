@@ -23,14 +23,14 @@
  * questions.
  */
 
-package com.sun.javafx.binding;
+package uk.co.benoxley.javafx.binding;
 
 import javafx.beans.Observable;
 import javafx.beans.WeakListener;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.util.ObjectConverter;
+import uk.co.benoxley.javafx.util.ObjectConverter;
 import javafx.util.StringConverter;
 
 import java.lang.ref.WeakReference;

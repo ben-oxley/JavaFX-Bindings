@@ -23,9 +23,10 @@
  * questions.
  */
 
-package com.sun.javafx.binding;
+package uk.co.benoxley.javafx.binding;
 
 import javafx.beans.binding.Bindings;
+import uk.co.benoxley.javafx.binding.BidirectionalObjectBinding;
 import javafx.beans.property.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -202,32 +203,32 @@ public class BidirectionalObjectBindingTest<T> {
 
     @Test
     public void testHashCode() {
-        final int hc1 = BidirectionalBinding.bind(op1, op2).hashCode();
-        final int hc2 = BidirectionalBinding.bind(op2, op1).hashCode();
+        final int hc1 = BidirectionalObjectBinding.bind(op1, op2).hashCode();
+        final int hc2 = BidirectionalObjectBinding.bind(op2, op1).hashCode();
         assertEquals(hc1, hc2);
     }
 
     @Test
     public void testEquals() {
-        final BidirectionalBinding golden = BidirectionalBinding.bind(op1, op2);
+        final BidirectionalObjectBinding golden = BidirectionalObjectBinding.bind(op1, op2);
 
         assertTrue(golden.equals(golden));
         assertFalse(golden.equals(null));
         assertFalse(golden.equals(op1));
-        assertTrue(golden.equals(BidirectionalBinding.bind(op1, op2)));
-        assertTrue(golden.equals(BidirectionalBinding.bind(op2, op1)));
-        assertFalse(golden.equals(BidirectionalBinding.bind(op1, op3)));
-        assertFalse(golden.equals(BidirectionalBinding.bind(op3, op1)));
-        assertFalse(golden.equals(BidirectionalBinding.bind(op3, op2)));
-        assertFalse(golden.equals(BidirectionalBinding.bind(op2, op3)));
+        assertTrue(golden.equals(BidirectionalObjectBinding.bind(op1, op2)));
+        assertTrue(golden.equals(BidirectionalObjectBinding.bind(op2, op1)));
+        assertFalse(golden.equals(BidirectionalObjectBinding.bind(op1, op3)));
+        assertFalse(golden.equals(BidirectionalObjectBinding.bind(op3, op1)));
+        assertFalse(golden.equals(BidirectionalObjectBinding.bind(op3, op2)));
+        assertFalse(golden.equals(BidirectionalObjectBinding.bind(op2, op3)));
     }
 
     @Test
     public void testEqualsWithGCedProperty() {
-        final BidirectionalBinding binding1 = BidirectionalBinding.bind(op1, op2);
-        final BidirectionalBinding binding2 = BidirectionalBinding.bind(op1, op2);
-        final BidirectionalBinding binding3 = BidirectionalBinding.bind(op2, op1);
-        final BidirectionalBinding binding4 = BidirectionalBinding.bind(op2, op1);
+        final BidirectionalObjectBinding binding1 = BidirectionalObjectBinding.bind(op1, op2);
+        final BidirectionalObjectBinding binding2 = BidirectionalObjectBinding.bind(op1, op2);
+        final BidirectionalObjectBinding binding3 = BidirectionalObjectBinding.bind(op2, op1);
+        final BidirectionalObjectBinding binding4 = BidirectionalObjectBinding.bind(op2, op1);
         op1 = null;
         System.gc();
 

@@ -23,7 +23,7 @@
  * questions.
  */
 
-package com.sun.javafx.binding;
+package uk.co.benoxley.javafx.binding;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

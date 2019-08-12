@@ -23,7 +23,7 @@
  * questions.
  */
 
-package javafx.util;
+package uk.co.benoxley.javafx.util;
 
 /**
  * Converter defines conversion behavior between strings and objects.
