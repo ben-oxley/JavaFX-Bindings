@@ -27,6 +27,7 @@ package uk.co.benoxley.javafx.binding;
 
 import javafx.beans.Observable;
 import javafx.beans.WeakListener;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -92,6 +93,18 @@ public abstract class BidirectionalObjectBinding<T> implements ChangeListener<T>
         stringProperty.setValue(converter.toString(otherProperty.getValue()));
         stringProperty.addListener(binding);
         otherProperty.addListener(binding);
+        return binding;
+    }
+
+    public static <A,B> Object bind(Property<A> property1, Property<B> property2, ObjectConverter<A,B> converter) {
+        checkParameters(property1, property2);
+        if (converter == null) {
+            throw new NullPointerException("Converter cannot be null");
+        }
+        final ObjectConversionBidirectionalObjectBinding<A,B> binding = new ObjectConverterBidirectionalObjectBinding<A,B>(property1, property2, converter);
+        property1.setValue(converter.toA(property2.getValue()));
+        property1.addListener(binding);
+        property2.addListener(binding);
         return binding;
     }
 
